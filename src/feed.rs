@@ -37,13 +37,13 @@ fn parse_feed(feed: &str) {
     let mut pointer = doc.root_element();
     
     if !pointer.has_tag_name("rss") {
-        panic!("invalid feed: bad 'feed' node")
+        panic!("invalid feed: bad 'feed' node");
     }
 
     pointer = pointer.first_element_child().expect("invalid feed: no child for 'feed' node");
 
     if !pointer.has_tag_name("channel") {
-        panic!("invalid feed: bad 'channel' node")
+        panic!("invalid feed: bad 'channel' node");
     }
 
     let items = pointer.children()
@@ -53,7 +53,7 @@ fn parse_feed(feed: &str) {
         pointer = item;
 
         if !pointer.has_tag_name("item") {
-            panic!("invalid feed: bad 'item' node")
+            panic!("invalid feed: bad 'item' node");
         }
 
         for element in item.children() {
