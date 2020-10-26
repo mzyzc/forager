@@ -10,3 +10,4 @@ edition = "2018"
 gtk = { version = "0.9.2", features = ["v3_16"] }
 gio = { version = "", features = ["v2_44"] }
 curl = "0.4"
+roxmltree = "0.13"
