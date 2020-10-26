@@ -10,7 +10,14 @@ pub struct FeedItem {
 pub fn print_feed() {
     let feed = fetch_feed("https://news.ycombinator.com/rss");
     println!("Fetch successful");
-    parse_feed(&feed);
+    let feed_items = parse_feed(&feed);
+
+    for item in feed_items.iter() {
+        println!("title: {}", item.title);
+        println!("link: {}", item.link);
+        println!("description: {}", item.description);
+        println!();
+    }
 }
 
 // Fetch XML data from a URL
@@ -32,9 +39,10 @@ fn fetch_feed(url: &str) -> String {
 }
 
 // function parse_feed(string) -> [feedItem]
-fn parse_feed(feed: &str) {
+fn parse_feed(feed: &str) -> Vec<FeedItem> {
     let doc = roxmltree::Document::parse(feed).unwrap();
     let mut pointer = doc.root_element();
+    let mut feed_list = Vec::new();
     
     if !pointer.has_tag_name("rss") {
         panic!("invalid feed: bad 'feed' node");
@@ -52,6 +60,10 @@ fn parse_feed(feed: &str) {
     for item in items {
         pointer = item;
 
+        let mut title = String::new();
+        let mut link = String::new();
+        let mut description = String::new();
+
         if !pointer.has_tag_name("item") {
             panic!("invalid feed: bad 'item' node");
         }
@@ -60,13 +72,15 @@ fn parse_feed(feed: &str) {
             pointer = element;
 
             match pointer.tag_name().name() {
-                "title" => println!("title: {}", pointer.text().unwrap()),
-                "link" => println!("link: {}", pointer.text().unwrap()),
-                "description" => println!("description: {}", pointer.text().unwrap()),
+                "title" => { title = pointer.text().unwrap().to_string() }
+                "link" => { link = pointer.text().unwrap().to_string() }
+                "description" => { description = pointer.text().unwrap().to_string() }
                 _ => (),
             }
         }
 
-        println!();
+        feed_list.push(FeedItem { title: title, link: link, description: description });
     }
+
+    feed_list
 }
