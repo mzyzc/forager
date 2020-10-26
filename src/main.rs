@@ -1,3 +1,5 @@
+mod feed;
+
 extern crate gtk;
 extern crate gio;
 
@@ -53,4 +55,6 @@ fn init_ui(application: &gtk::Application) {
         button_box.add(&fc_button);
 
         window.show_all();
+
+        feed::print_feed();
 }
