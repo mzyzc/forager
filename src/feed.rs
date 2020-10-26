@@ -7,14 +7,14 @@ pub struct FeedItem {
     pub description: String,
 }
 
-// Fetch XML data from a URL
 pub fn print_feed() {
-    let rss = fetch_rss("https://news.ycombinator.com/rss");
+    let feed = fetch_feed("https://news.ycombinator.com/rss");
     println!("Fetch successful");
-    parse_rss(&rss);
+    parse_feed(&feed);
 }
 
-fn fetch_rss(url: &str) -> String {
+// Fetch XML data from a URL
+fn fetch_feed(url: &str) -> String {
     let mut data = Vec::new();
     let mut handle = Easy::new();
     handle.url(url).unwrap();
@@ -31,19 +31,19 @@ fn fetch_rss(url: &str) -> String {
     String::from_utf8_lossy(&data).to_string()
 }
 
-// function parse_rss(string) -> [feedItem]
-fn parse_rss(rss: &str) {
-    let doc = roxmltree::Document::parse(rss).unwrap();
+// function parse_feed(string) -> [feedItem]
+fn parse_feed(feed: &str) {
+    let doc = roxmltree::Document::parse(feed).unwrap();
     let mut pointer = doc.root_element();
     
     if !pointer.has_tag_name("rss") {
-        panic!("invalid RSS feed: bad 'rss' node")
+        panic!("invalid feed: bad 'feed' node")
     }
 
-    pointer = pointer.first_element_child().expect("invalid RSS feed: no child for 'rss' node");
+    pointer = pointer.first_element_child().expect("invalid feed: no child for 'feed' node");
 
     if !pointer.has_tag_name("channel") {
-        panic!("invalid RSS feed: bad 'channel' node")
+        panic!("invalid feed: bad 'channel' node")
     }
 
     let items = pointer.children()
@@ -53,7 +53,7 @@ fn parse_rss(rss: &str) {
         pointer = item;
 
         if !pointer.has_tag_name("item") {
-            panic!("invalid RSS feed: bad 'item' node")
+            panic!("invalid feed: bad 'item' node")
         }
 
         for element in item.children() {
