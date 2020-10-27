@@ -1,9 +1,6 @@
 mod events;
 mod feed;
 
-extern crate gtk;
-extern crate gio;
-
 use gtk::prelude::*;
 use gtk::{Application, ApplicationWindow, Grid, MenuBar, MenuItem, Paned, Orientation, ScrolledWindow, TextView, ListBox, ButtonBox, FileChooserButton, FileChooserAction};
 use gio::prelude::*;

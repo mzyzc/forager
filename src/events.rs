@@ -1,8 +1,6 @@
-extern crate gtk;
-
 use crate::feed;
 use gtk::prelude::*;
-use gtk::{ListBox, ListBoxRow, Label};
+use gtk::{ListBoxRow, Label};
 
 pub fn update_list(list: &gtk::ListBox, url: &str) {
     let items = feed::add_feed(url);
