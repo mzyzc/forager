@@ -2,7 +2,7 @@ mod events;
 mod feed;
 
 use gtk::prelude::*;
-use gtk::{Application, ApplicationWindow, Grid, MenuBar, MenuItem, Paned, Orientation, ScrolledWindow, TextView, ListBox, ButtonBox, FileChooserButton, FileChooserAction};
+use gtk::{Application, ApplicationWindow, Grid, MenuBar, MenuItem, Paned, Orientation, ScrolledWindow, TextView, ListBox, ButtonBox, Button};
 use gio::prelude::*;
 
 fn main() {
@@ -49,10 +49,11 @@ fn init_ui(application: &gtk::Application) {
         let button_box = ButtonBox::new(Orientation::Horizontal);
         grid.attach(&button_box, 0, 3, 1, 1);
 
-        let fc_button = FileChooserButton::new("Select file", FileChooserAction::Open);
-        button_box.add(&fc_button);
+        let button = Button::with_label("Update");
+        button.connect_clicked(move |_| {
+            events::update_list(&list_box, "https://news.ycombinator.com/rss");
+        });
+        button_box.add(&button);
 
         window.show_all();
-
-        events::update_list(&list_box, "https://news.ycombinator.com/rss");
 }

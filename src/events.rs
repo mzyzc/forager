@@ -2,6 +2,7 @@ use crate::feed;
 use gtk::prelude::*;
 use gtk::{ListBoxRow, Label};
 
+// Import feed into a GTK list
 pub fn update_list(list: &gtk::ListBox, url: &str) {
     let items = feed::add_feed(url);
 
