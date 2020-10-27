@@ -7,17 +7,15 @@ pub struct FeedItem {
     pub description: String,
 }
 
-pub fn print_feed() {
-    let feed = fetch_feed("https://news.ycombinator.com/rss");
+// Get all the items in a feed
+pub fn add_feed(url: &str) -> Vec<FeedItem> {
+    let feed = fetch_feed(url);
     println!("Fetch successful");
     let feed_items = parse_feed(&feed);
+    println!("Parse successful");
+    println!();
 
-    for item in feed_items.iter() {
-        println!("title: {}", item.title);
-        println!("link: {}", item.link);
-        println!("description: {}", item.description);
-        println!();
-    }
+    feed_items
 }
 
 // Fetch XML data from a URL
@@ -38,7 +36,7 @@ fn fetch_feed(url: &str) -> String {
     String::from_utf8_lossy(&data).to_string()
 }
 
-// function parse_feed(string) -> [feedItem]
+// Extract items from a feed
 fn parse_feed(feed: &str) -> Vec<FeedItem> {
     let doc = roxmltree::Document::parse(feed).unwrap();
     let mut pointer = doc.root_element();

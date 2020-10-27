@@ -1,12 +1,12 @@
+mod events;
 mod feed;
 
 extern crate gtk;
 extern crate gio;
 
 use gtk::prelude::*;
-use gio::prelude::*;
-
 use gtk::{Application, ApplicationWindow, Grid, MenuBar, MenuItem, Paned, Orientation, ScrolledWindow, TextView, ListBox, ButtonBox, FileChooserButton, FileChooserAction};
+use gio::prelude::*;
 
 fn main() {
     let application = Application::new(
@@ -56,5 +56,5 @@ fn init_ui(application: &gtk::Application) {
 
         window.show_all();
 
-        feed::print_feed();
+        events::update_list(&list_box, "https://news.ycombinator.com/rss");
 }
