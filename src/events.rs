@@ -9,11 +9,12 @@ pub fn update_list(list: &gtk::ListBox, url: &str) {
 
     for item in items.iter() {
         let row = ListBoxRow::new();
+
         let label = Label::new(Some(&item.title));
+        label.set_xalign(0.0);
         row.add(&label);
 
         list.prepend(&row);
-
         list.show_all();
 
         println!("title: {}", item.title);

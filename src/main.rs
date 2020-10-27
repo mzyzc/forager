@@ -37,6 +37,7 @@ fn init_ui(application: &gtk::Application) {
         let paned = Paned::new(Orientation::Horizontal);
         paned.set_hexpand(true);
         paned.set_vexpand(true);
+        paned.set_position(300);
         grid.attach(&paned, 0, 1, 1, 1);
 
         let scroll_win = ScrolledWindow::new(gtk::NONE_ADJUSTMENT, gtk::NONE_ADJUSTMENT);
