@@ -7,9 +7,9 @@ use gio::prelude::*;
 
 fn main() {
     let application = Application::new(
-        Some("com.mzyzc.Forage"),
+        Some("com.mzyzc.forager"),
         Default::default(),
-    ).expect("failed to initialize GTK application");
+    ).expect("failed to initialize GTK");
 
     application.connect_activate(|application| {
         init_ui(&application);
@@ -20,7 +20,7 @@ fn main() {
 
 fn init_ui(application: &gtk::Application) {
         let window = ApplicationWindow::new(application);
-        window.set_title("Forage");
+        window.set_title("Forager");
         window.set_default_size(800, 600);
 
         let grid = Grid::new();
