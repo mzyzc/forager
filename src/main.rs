@@ -2,7 +2,7 @@ mod events;
 mod feed;
 
 use gtk::prelude::*;
-use gtk::{Application, ApplicationWindow, Grid, MenuBar, MenuItem, Paned, Orientation, ScrolledWindow, TextView, ListBox, ButtonBox, Button};
+use gtk::{Application, ApplicationWindow, Box, Grid, MenuBar, MenuItem, Paned, Orientation, ScrolledWindow, ListBox, ButtonBox, Button};
 use gio::prelude::*;
 
 fn main() {
@@ -40,10 +40,16 @@ fn init_ui(application: &gtk::Application) {
         let scroll_win = ScrolledWindow::new(gtk::NONE_ADJUSTMENT, gtk::NONE_ADJUSTMENT);
         paned.add1(&scroll_win);
 
-        let text_view = TextView::new();
-        paned.add2(&text_view);
+        let preview_box = Box::new(Orientation::Vertical, 6);
+        paned.add2(&preview_box);
 
         let list_box = ListBox::new();
+        list_box.connect_row_selected(move |_, y| {
+            if y.is_some() {
+                let row = y.unwrap();
+                events::update_preview(&preview_box, &row);
+            }
+        });
         scroll_win.add(&list_box);
 
         let button_box = ButtonBox::new(Orientation::Horizontal);
