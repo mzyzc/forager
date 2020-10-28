@@ -7,6 +7,13 @@ pub struct FeedItem {
     pub description: String,
 }
 
+pub fn clone_feed(item: &FeedItem) -> FeedItem {
+    let title = item.title.clone();
+    let link = item.link.clone();
+    let description = item.description.clone();
+    FeedItem { title: title, link: link, description: description }       
+}
+
 // Get all the items in a feed
 pub fn add_feed(url: &str) -> Vec<FeedItem> {
     let feed = fetch_feed(url);
