@@ -13,9 +13,8 @@ pub fn update_list(list: &gtk::ListBox, url: &str) {
         label.set_xalign(0.0);
         row.add(&label);
 
-        let item_clone = feed::clone_feed(&item);
         unsafe {
-            row.set_data("data", item_clone);
+            row.set_data("data", item.clone());
         }
 
         list.prepend(&row);
@@ -25,22 +24,22 @@ pub fn update_list(list: &gtk::ListBox, url: &str) {
 
 // Update the preview when a feed item is selected
 pub fn update_preview(preview: &gtk::Box, row: &gtk::ListBoxRow) {
-    let title = Label::new(Some("Title missing"));
-    let description = Label::new(Some("Description missing"));
-    let link = Label::new(Some("Link missing"));
+    // Set fallback values
+    let title = Label::new(Some("[Title could not be displayed]"));
+    let description = Label::new(Some("[Description could not be displayed]"));
+    let link = Label::new(Some("[Link could not be displayed]"));
 
     unsafe {
         let data_wrapper: Option<&feed::FeedItem> = row.get_data("data");
         if data_wrapper.is_some() {
             let data = data_wrapper.unwrap();
 
-            title.set_label(&data.title.as_str());
-            description.set_label(&data.description.as_str());
-            link.set_label(&data.link.as_str());
+            title.set_label(&data.title);
+            description.set_label(&data.description);
+            link.set_label(&data.link);
         }
     }
 
-    // Remove old preview elements
     let preview_items = preview.get_children();
     for item in preview_items.iter() {
         preview.remove(item);

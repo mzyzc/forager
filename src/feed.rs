@@ -7,17 +7,20 @@ pub struct FeedItem {
     pub description: String,
 }
 
-pub fn clone_feed(item: &FeedItem) -> FeedItem {
-    let title = item.title.clone();
-    let link = item.link.clone();
-    let description = item.description.clone();
-    FeedItem { title: title, link: link, description: description }       
+impl FeedItem {
+    pub fn clone(&self) -> FeedItem {
+        let title = self.title.clone();
+        let link = self.link.clone();
+        let description = self.description.clone();
+        FeedItem { title: title, link: link, description: description }       
+    }
 }
 
-// Get all the items in a feed
+// Read data from a feed stored online
 pub fn add_feed(url: &str) -> Vec<FeedItem> {
     let feed = fetch_feed(url);
     println!("Fetch successful");
+
     let feed_items = parse_feed(&feed);
     println!("Parse successful");
     println!();
@@ -25,7 +28,7 @@ pub fn add_feed(url: &str) -> Vec<FeedItem> {
     feed_items
 }
 
-// Fetch XML data from a URL
+// Fetch data from a URL
 fn fetch_feed(url: &str) -> String {
     let mut data = Vec::new();
     let mut handle = Easy::new();
@@ -43,7 +46,7 @@ fn fetch_feed(url: &str) -> String {
     String::from_utf8_lossy(&data).to_string()
 }
 
-// Extract items from a feed
+// Extract feed items from an XML file
 fn parse_feed(feed: &str) -> Vec<FeedItem> {
     let doc = roxmltree::Document::parse(feed).unwrap();
     let mut pointer = doc.root_element();
