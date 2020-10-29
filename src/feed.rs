@@ -16,18 +16,18 @@ impl FeedItem {
     }
 }
 
-pub fn add_feed(url: &str) -> Vec<FeedItem> {
-    let feed = fetch_feed(url);
+pub fn add_feed(url: &str) -> Result<Vec<FeedItem>, &str> {
+    let feed = fetch_feed(url).unwrap();
     println!("Fetch successful");
 
-    let feed_items = parse_feed(&feed);
+    let feed_items = parse_feed(&feed).unwrap();
     println!("Parse successful");
     println!();
 
-    feed_items
+    Ok(feed_items)
 }
 
-fn fetch_feed(url: &str) -> String {
+fn fetch_feed(url: &str) -> Result<String, &str> {
     let mut data = Vec::new();
     let mut handle = Easy::new();
 
@@ -41,10 +41,10 @@ fn fetch_feed(url: &str) -> String {
         transfer.perform().unwrap();
     }
 
-    String::from_utf8_lossy(&data).to_string()
+    Ok(String::from_utf8_lossy(&data).to_string())
 }
 
-fn parse_feed(feed: &str) -> Vec<FeedItem> {
+fn parse_feed(feed: &str) -> Result<Vec<FeedItem>, &str> {
     let doc = roxmltree::Document::parse(feed).unwrap();
     let mut pointer = doc.root_element();
     let mut feed_list = Vec::new();
@@ -87,5 +87,5 @@ fn parse_feed(feed: &str) -> Vec<FeedItem> {
         feed_list.push(FeedItem { title: title, link: link, description: description });
     }
 
-    feed_list
+    Ok(feed_list)
 }
