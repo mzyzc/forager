@@ -30,9 +30,9 @@ pub fn add_feed(url: &str) -> Vec<FeedItem> {
 fn fetch_feed(url: &str) -> String {
     let mut data = Vec::new();
     let mut handle = Easy::new();
+
     handle.url(url).unwrap();
     {
-
         let mut transfer = handle.transfer();
         transfer.write_function(|new_data| {
             data.extend_from_slice(new_data);
