@@ -27,6 +27,10 @@ pub fn update_preview(preview: &gtk::Box, row: &gtk::ListBoxRow) {
     let description = Label::new(Some("[Description could not be displayed]"));
     let link = Label::new(Some("[Link could not be displayed]"));
 
+    title.set_selectable(true);
+    description.set_selectable(true);
+    link.set_selectable(true);
+
     // Unsafe block needed to get data from a widget
     unsafe {
         let data_wrapper: Option<&feed::FeedItem> = row.get_data("data");
