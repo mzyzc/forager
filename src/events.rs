@@ -2,7 +2,6 @@ use crate::feed;
 use gtk::prelude::*;
 use gtk::{ListBoxRow, Label};
 
-// Import feed into a GTK list
 pub fn update_list(list: &gtk::ListBox, url: &str) {
     let items = feed::add_feed(url);
 
@@ -22,9 +21,7 @@ pub fn update_list(list: &gtk::ListBox, url: &str) {
     }
 }
 
-// Update the preview when a feed item is selected
 pub fn update_preview(preview: &gtk::Box, row: &gtk::ListBoxRow) {
-    // Set fallback values
     let title = Label::new(Some("[Title could not be displayed]"));
     let description = Label::new(Some("[Description could not be displayed]"));
     let link = Label::new(Some("[Link could not be displayed]"));

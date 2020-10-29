@@ -16,7 +16,6 @@ impl FeedItem {
     }
 }
 
-// Read data from a feed stored online
 pub fn add_feed(url: &str) -> Vec<FeedItem> {
     let feed = fetch_feed(url);
     println!("Fetch successful");
@@ -28,7 +27,6 @@ pub fn add_feed(url: &str) -> Vec<FeedItem> {
     feed_items
 }
 
-// Fetch data from a URL
 fn fetch_feed(url: &str) -> String {
     let mut data = Vec::new();
     let mut handle = Easy::new();
@@ -46,7 +44,6 @@ fn fetch_feed(url: &str) -> String {
     String::from_utf8_lossy(&data).to_string()
 }
 
-// Extract feed items from an XML file
 fn parse_feed(feed: &str) -> Vec<FeedItem> {
     let doc = roxmltree::Document::parse(feed).unwrap();
     let mut pointer = doc.root_element();
