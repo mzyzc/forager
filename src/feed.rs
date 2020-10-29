@@ -50,13 +50,13 @@ fn parse_feed(feed: &str) -> Result<Vec<FeedItem>, &str> {
     let mut feed_list = Vec::new();
     
     if !pointer.has_tag_name("rss") {
-        panic!("invalid feed: bad 'feed' node");
+        return Err("invalid feed: bad 'feed' node");
     }
 
     pointer = pointer.first_element_child().expect("invalid feed: no child for 'feed' node");
 
     if !pointer.has_tag_name("channel") {
-        panic!("invalid feed: bad 'channel' node");
+        return Err("invalid feed: bad 'channel' node");
     }
 
     let items = pointer.children()
@@ -70,7 +70,7 @@ fn parse_feed(feed: &str) -> Result<Vec<FeedItem>, &str> {
         let mut description = String::new();
 
         if !pointer.has_tag_name("item") {
-            panic!("invalid feed: bad 'item' node");
+            return Err("invalid feed: bad 'item' node");
         }
 
         for element in item.children() {
