@@ -12,6 +12,7 @@ pub fn update_list(list: &gtk::ListBox, url: &str) {
         label.set_xalign(0.0);
         row.add(&label);
 
+        // Unsafe block needed to set data for a widget
         unsafe {
             row.set_data("data", item.clone());
         }
@@ -26,6 +27,7 @@ pub fn update_preview(preview: &gtk::Box, row: &gtk::ListBoxRow) {
     let description = Label::new(Some("[Description could not be displayed]"));
     let link = Label::new(Some("[Link could not be displayed]"));
 
+    // Unsafe block needed to get data from a widget
     unsafe {
         let data_wrapper: Option<&feed::FeedItem> = row.get_data("data");
         if data_wrapper.is_some() {
