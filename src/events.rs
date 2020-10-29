@@ -27,6 +27,10 @@ pub fn update_preview(preview: &gtk::Box, row: &gtk::ListBoxRow) {
     let description = Label::new(Some("[Description could not be displayed]"));
     let link = Label::new(Some("[Link could not be displayed]"));
 
+    title.set_xalign(0.0);
+    description.set_xalign(0.0);
+    link.set_xalign(0.0);
+
     title.set_selectable(true);
     description.set_selectable(true);
     link.set_selectable(true);
@@ -37,9 +41,9 @@ pub fn update_preview(preview: &gtk::Box, row: &gtk::ListBoxRow) {
         if data_wrapper.is_some() {
             let data = data_wrapper.unwrap();
 
-            title.set_label(&data.title);
-            description.set_label(&data.description);
-            link.set_label(&data.link);
+            title.set_markup(&data.title);
+            description.set_markup(&data.description);
+            link.set_markup(&data.link);
         }
     }
 
