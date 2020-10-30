@@ -1,5 +1,6 @@
 use curl::easy::Easy;
 use roxmltree;
+use std::io::{Error, ErrorKind};
 
 pub struct FeedItem {
     pub title: String,
@@ -16,18 +17,21 @@ impl FeedItem {
     }
 }
 
-pub fn add_feed(url: &str) -> Result<Vec<FeedItem>, &str> {
-    let feed = fetch_feed(url).unwrap();
-    println!("Fetch successful");
+pub fn add_feed(url: &str) -> Result<Vec<FeedItem>, Error> {
+    let feed = fetch_feed(url);
+    let feed = match feed {
+        Ok(f) => f,
+        Err(e) => return Err(e),
+    };
 
-    let feed_items = parse_feed(&feed).unwrap();
-    println!("Parse successful");
-    println!();
-
-    Ok(feed_items)
+    let feed_items = parse_feed(&feed);
+    match feed_items {
+        Ok(f) => return Ok(f),
+        Err(e) => return Err(e),
+    };
 }
 
-fn fetch_feed(url: &str) -> Result<String, &str> {
+fn fetch_feed(url: &str) -> Result<String, Error> {
     let mut data = Vec::new();
     let mut handle = Easy::new();
 
@@ -44,19 +48,19 @@ fn fetch_feed(url: &str) -> Result<String, &str> {
     Ok(String::from_utf8_lossy(&data).to_string())
 }
 
-fn parse_feed(feed: &str) -> Result<Vec<FeedItem>, &str> {
+fn parse_feed(feed: &str) -> Result<Vec<FeedItem>, Error> {
     let doc = roxmltree::Document::parse(feed).unwrap();
     let mut pointer = doc.root_element();
     let mut feed_list = Vec::new();
     
     if !pointer.has_tag_name("rss") {
-        return Err("invalid feed: bad 'feed' node");
+        return Err(Error::new(ErrorKind::InvalidData, "bad 'feed' node"));
     }
 
     pointer = pointer.first_element_child().expect("invalid feed: no child for 'feed' node");
 
     if !pointer.has_tag_name("channel") {
-        return Err("invalid feed: bad 'channel' node");
+        return Err(Error::new(ErrorKind::InvalidData, "bad 'channel' node"));
     }
 
     let items = pointer.children()
@@ -70,7 +74,7 @@ fn parse_feed(feed: &str) -> Result<Vec<FeedItem>, &str> {
         let mut description = String::new();
 
         if !pointer.has_tag_name("item") {
-            return Err("invalid feed: bad 'item' node");
+            return Err(Error::new(ErrorKind::InvalidData, "bad 'item' node"));
         }
 
         for element in item.children() {

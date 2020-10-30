@@ -3,7 +3,11 @@ use gtk::prelude::*;
 use gtk::{ListBoxRow, Label};
 
 pub fn update_list(list: &gtk::ListBox, url: &str) {
-    let items = feed::add_feed(url).unwrap();
+    let items = feed::add_feed(url);
+    let items = match items {
+        Ok(f) => f,
+        Err(e) => panic!(e),
+    };
 
     for item in items.iter() {
         let row = ListBoxRow::new();
