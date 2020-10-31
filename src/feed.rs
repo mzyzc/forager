@@ -53,7 +53,10 @@ fn parse_feed(feed: &str) -> Result<Vec<FeedItem>, Error> {
         return Err(Error::new(ErrorKind::InvalidData, "bad 'feed' node"));
     }
 
-    pointer = pointer.first_element_child().expect("invalid feed: no child for 'feed' node");
+    pointer = match pointer.first_element_child() {
+        Some(c) => c,
+        None => return Err(Error::new(ErrorKind::InvalidData, "no child for 'feed' node")),
+    };
 
     if !pointer.has_tag_name("channel") {
         return Err(Error::new(ErrorKind::InvalidData, "bad 'channel' node"));
