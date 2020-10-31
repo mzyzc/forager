@@ -31,21 +31,24 @@ fn fetch_feed(url: &str) -> Result<String, Error> {
     let mut data = Vec::new();
     let mut handle = Easy::new();
 
-    handle.url(url).unwrap();
+    handle.url(url)?;
     {
         let mut transfer = handle.transfer();
         transfer.write_function(|new_data| {
             data.extend_from_slice(new_data);
             Ok(new_data.len())
-        }).unwrap();
-        transfer.perform().unwrap();
+        })?;
+        transfer.perform()?;
     }
 
     Ok(String::from_utf8_lossy(&data).to_string())
 }
 
 fn parse_feed(feed: &str) -> Result<Vec<FeedItem>, Error> {
-    let doc = roxmltree::Document::parse(feed).unwrap();
+    let doc = match roxmltree::Document::parse(feed) {
+        Ok(d) => d,
+        Err(_) => return Err(Error::new(ErrorKind::InvalidData, "could not parse XML data")),
+    };
     let mut pointer = doc.root_element();
     let mut feed_list = Vec::new();
     
