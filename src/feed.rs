@@ -18,11 +18,7 @@ impl FeedItem {
 }
 
 pub fn add_feed(url: &str) -> Result<Vec<FeedItem>, Error> {
-    let feed = fetch_feed(url);
-    let feed = match feed {
-        Ok(f) => f,
-        Err(e) => return Err(e),
-    };
+    let feed = fetch_feed(url)?;
 
     let feed_items = parse_feed(&feed);
     match feed_items {
