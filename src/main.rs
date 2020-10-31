@@ -2,7 +2,7 @@ mod events;
 mod feed;
 
 use gtk::prelude::*;
-use gtk::{Application, ApplicationWindow, Box, Grid, MenuBar, MenuItem, Paned, Orientation, ScrolledWindow, ListBox, ButtonBox, Button};
+use gtk::{Application, ApplicationWindow, Box, Entry, Grid, MenuBar, MenuItem, Paned, Orientation, ScrolledWindow, ListBox, ButtonBox, Button};
 use gio::prelude::*;
 
 fn main() {
@@ -52,12 +52,15 @@ fn init_ui(application: &gtk::Application) {
         });
         scroll_win.add(&list_box);
 
+        let link_entry = Entry::new();
+        grid.attach(&link_entry, 0, 3, 1, 1);
+
         let button_box = ButtonBox::new(Orientation::Horizontal);
-        grid.attach(&button_box, 0, 3, 1, 1);
+        grid.attach(&button_box, 1, 3, 1, 1);
 
         let button = Button::with_label("Update");
         button.connect_clicked(move |_| {
-            events::update_list(&list_box, "https://news.ycombinator.com/rss");
+            events::update_list(&list_box, &link_entry.get_buffer().get_text());
         });
         button_box.add(&button);
 
