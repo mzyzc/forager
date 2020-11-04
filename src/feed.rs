@@ -17,17 +17,17 @@ impl FeedItem {
     }
 }
 
-pub fn add_feed(url: &str) -> Result<Vec<FeedItem>, Error> {
-    let feed = fetch_feed(url)?;
+pub fn get_feed(url: &str) -> Result<Vec<FeedItem>, Error> {
+    let feed = get_data(url)?;
 
-    let feed_items = parse_feed(&feed);
+    let feed_items = parse_xml(&feed);
     match feed_items {
         Ok(f) => return Ok(f),
         Err(e) => return Err(e),
     };
 }
 
-fn fetch_feed(url: &str) -> Result<String, Error> {
+fn get_data(url: &str) -> Result<String, Error> {
     let mut data = Vec::new();
     let mut handle = Easy::new();
 
@@ -44,7 +44,7 @@ fn fetch_feed(url: &str) -> Result<String, Error> {
     Ok(String::from_utf8_lossy(&data).to_string())
 }
 
-fn parse_feed(feed: &str) -> Result<Vec<FeedItem>, Error> {
+fn parse_xml(feed: &str) -> Result<Vec<FeedItem>, Error> {
     let doc = match roxmltree::Document::parse(feed) {
         Ok(d) => d,
         Err(_) => return Err(Error::new(ErrorKind::InvalidData, "could not parse XML data")),

@@ -3,7 +3,7 @@ use gtk::prelude::*;
 use gtk::{ListBoxRow, Label};
 
 pub fn update_list(list: &gtk::ListBox, url: &str) {
-    let items = match feed::add_feed(url) {
+    let items = match feed::get_feed(url) {
         Ok(f) => f,
         Err(e) => {
             println!("{}", e);
