@@ -4,13 +4,15 @@
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkApplicationWindow" id="window">
     <property name="can-focus">False</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
     <child>
       <!-- n-columns=2 n-rows=3 -->
       <object class="GtkGrid" id="grid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <child>
-          <object class="GtkMenuBar">
+          <object class="GtkMenuBar" id="menu-bar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>

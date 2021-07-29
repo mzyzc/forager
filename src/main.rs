@@ -17,9 +17,30 @@ fn main() {
         let builder = gtk::Builder::from_string(ui_xml);
         let window: gtk::Window = builder.get_object("window").unwrap();
         window.set_application(Some(app));
+        setup_signals(&builder);
 
         window.show_all();
     });
 
     application.run(&[]);
+}
+
+fn setup_signals(builder: &gtk::Builder) {
+    let list: gtk::ListBox = builder.get_object("list").unwrap();
+    let preview = builder.get_object("preview").unwrap();
+
+    list.connect_row_selected(move |_, y| {
+        if y.is_some() {
+            let row = y.unwrap();
+            events::update_preview(&preview, &row);
+        }
+    });
+
+    let button: gtk::Button = builder.get_object("submit").unwrap();
+    let entry: gtk::Entry = builder.get_object("entry").unwrap();
+
+    button.connect_clicked(move |_| {
+        events::update_list(&list, &entry.get_buffer().get_text())
+    });
+
 }
