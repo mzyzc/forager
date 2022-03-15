@@ -43,9 +43,10 @@ pub fn update_preview(preview: &gtk::Box, row: &gtk::ListBoxRow) {
 
     // Unsafe block needed to get data from a widget
     unsafe {
-        let data_wrapper: Option<&feed::FeedItem> = row.get_data("data");
+        //let data_wrapper: Option<&feed::FeedItem> = row.data("data");
+        let data_wrapper = row.data("data");
         if data_wrapper.is_some() {
-            let data = data_wrapper.unwrap();
+            let data: &feed::FeedItem = data_wrapper.unwrap().as_ref();
 
             title.set_markup(&data.title);
             description.set_markup(&data.description);
@@ -53,7 +54,7 @@ pub fn update_preview(preview: &gtk::Box, row: &gtk::ListBoxRow) {
         }
     }
 
-    let preview_items = preview.get_children();
+    let preview_items = preview.children();
     for item in preview_items.iter() {
         preview.remove(item);
     }

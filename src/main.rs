@@ -9,25 +9,25 @@ fn main() {
     let application = gtk::Application::new(
         Some("com.mzyzc.forager"),
         Default::default(),
-    ).expect("failed to initialize GTK");
+    );
 
 
     application.connect_activate(|app| {
         let ui_xml = include_str!("ui.glade");
         let builder = gtk::Builder::from_string(ui_xml);
-        let window: gtk::Window = builder.get_object("window").unwrap();
+        let window: gtk::Window = builder.object("window").unwrap();
         window.set_application(Some(app));
         setup_signals(&builder);
 
         window.show_all();
     });
 
-    application.run(&[]);
+    application.run();
 }
 
 fn setup_signals(builder: &gtk::Builder) {
-    let list: gtk::ListBox = builder.get_object("list").unwrap();
-    let preview = builder.get_object("preview").unwrap();
+    let list: gtk::ListBox = builder.object("list").unwrap();
+    let preview = builder.object("preview").unwrap();
 
     list.connect_row_selected(move |_, y| {
         if y.is_some() {
@@ -36,11 +36,11 @@ fn setup_signals(builder: &gtk::Builder) {
         }
     });
 
-    let button: gtk::Button = builder.get_object("submit").unwrap();
-    let entry: gtk::Entry = builder.get_object("entry").unwrap();
+    let button: gtk::Button = builder.object("submit").unwrap();
+    let entry: gtk::Entry = builder.object("entry").unwrap();
 
     button.connect_clicked(move |_| {
-        events::update_list(&list, &entry.get_buffer().get_text())
+        events::update_list(&list, &entry.buffer().text())
     });
 
 }
